@@ -1,4 +1,5 @@
 (function() {
+  // Initialize chainable $ selector object
   $ = function(selector) {
     if (!(this instanceof $)) {
       return new $(selector);
@@ -11,6 +12,7 @@
     }
     [].push.apply(this, elements);
   };
+  // Extend/overload a target objects properties
   $.extend = function(target, object) {
     for (var prop in object) {
       if (object.hasOwnProperty(prop)) {
@@ -19,13 +21,17 @@
     }
     return target;
   };
+  // Check if object has array-like length property
   var isArrayLike = function(obj) {
     return obj && typeof obj === "object" && (obj.length === 0 || typeof obj.length === "number" && obj.length > 0 && obj.length - 1 in obj);
   };
+  // Attach helper methods to $
   $.extend($, {
+    // Is object an Array?
     isArray: function(obj) {
       return Object.prototype.toString.call(obj) === "[object Array]";
     },
+    // loop through array elements performing the callback, which takes index and element as parameters
     each: function(collection, cb) {
       if (isArrayLike(collection)) {
         for (var i = 0; i < collection.length; i++) {
@@ -44,6 +50,7 @@
       }
       return collection;
     },
+    // Return array with collection props as indices
     makeArray: function(arr) {
       if ($.isArray(arr)) {
         return arr;
@@ -54,6 +61,7 @@
       });
       return array;
     },
+    // Return a function set to a particular context (this)
     proxy: function(fn, context) {
       return function() {
         return fn.apply(context, arguments);
@@ -61,6 +69,7 @@
     },
     fn: $.prototype
   });
+  // Return text from all child nodes in a collection
   var getText = function(childNodes) {
     var text = "";
     $.each(childNodes, function(i, child) {
@@ -72,6 +81,7 @@
     });
     return text;
   };
+  // Factory for .next(), .prex(), .parent(), .children() traversal methods
   var makeTraverser = function(traverser) {
     return function() {
       var elements = [], args = arguments;
@@ -93,6 +103,7 @@
     }
     return cur;
   };
+  // Attach DOM manipulation, traversal, event handling to $.prototype
   $.extend($.prototype, {
     html: function(newHtml) {
       if(arguments.length) {
@@ -271,6 +282,7 @@
     }
   });
   var elementIdDataMap = {}, ids = 1, expando = "my$" + Math.random();
+  // Create HTML fragment
   $.buildFragment = function(html) {
     if (typeof html === "string") {
       var matchData = html.match(/<(\w+)/), firstTag = matchData ? matchData[1] : "div", parentNodes = {

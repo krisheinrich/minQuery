@@ -81,7 +81,7 @@
     });
     return text;
   };
-  // Factory for .next(), .prex(), .parent(), .children() traversal methods
+  // Factory for .next(), .prex(), .parent(), .children(), and .find() traversal methods
   var makeTraverser = function(traverser) {
     return function() {
       var elements = [], args = arguments;
